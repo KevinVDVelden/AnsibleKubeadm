@@ -1,0 +1,6 @@
+---
+- hosts: kubernetesservers
+  become: yes
+  tasks:
+  - name: Teardown
+    command: kubeadm reset
