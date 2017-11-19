@@ -1,0 +1,52 @@
+---
+- hosts: kubernetescontrol
+  become: yes
+  tasks:
+  - name: Create init script directory
+    file:
+        path: /root/kubernetes
+        state: directory
+        mode: 0755
+
+  - name: Copy init script
+    copy:
+      src: ../kubernetes/init.sh
+      dest: /root/kubernetes/init.sh
+      mode: 0744
+
+  - name: Run init file
+    command: sh /root/kubernetes/init.sh
+    args:
+        chdir: /root/kubernetes/
+
+  - name: Fetch join command
+    fetch:
+      src: /root/join
+      dest: ../kubernetes/join.sh
+      flat: true
+  - name: Fetch kubectl configuration
+    fetch:
+      src: /etc/kubernetes/admin.conf
+      dest: ~/.kube/config
+      flat: true
+
+- hosts: kubernetesservers:!kubernetescontrol
+  become: yes
+  tasks:
+  - name: Create join script directory
+    file:
+        path: /root/kubernetes
+        state: directory
+        mode: 0755
+
+  - name: Copy join script
+    copy:
+      src: ../kubernetes/join.sh
+      dest: /root/kubernetes/init.sh
+      mode: 0744
+
+  - name: Run init file
+    command: sh /root/kubernetes/init.sh
+    args:
+        chdir: /root/kubernetes/
+

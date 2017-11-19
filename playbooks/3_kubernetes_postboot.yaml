@@ -1,0 +1,10 @@
+- hosts: kubernetesservers
+  become: yes
+  tasks:
+  - name: Turn swap off
+    command: swapoff -a
+
+  - name: Enable forwarding for Flannel networking
+    iptables:
+      chain: FORWARD
+      policy: ACCEPT

@@ -1,0 +1,35 @@
+---
+- hosts: kubernetesservers:kubectl
+  become: yes
+  tasks:
+  - name: Enable repository key
+    apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        id: 3746C208A7317B0F
+
+  - name: Enable repository
+    apt_repository:
+      repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+
+  - name: Install kubectl
+    apt:
+      name: kubectl
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+- hosts: kubernetesservers
+  become: yes
+  strategy: free
+  tasks:
+  - name: Install kubeadm
+    apt:
+      name: kubeadm
+      state: latest
+      update_cache: true
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install kubelet
+    apt:
+      name: kubelet
+      state: latest
+    when: ansible_distribution == "Ubuntu"
