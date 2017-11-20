@@ -10,7 +10,7 @@
 
   - name: Copy init script
     copy:
-      src: ../kubernetes/init.sh
+      src: ./kubernetes/init.sh
       dest: /root/kubernetes/init.sh
       mode: 0744
 
@@ -22,7 +22,7 @@
   - name: Fetch join command
     fetch:
       src: /root/join
-      dest: ../kubernetes/join.sh
+      dest: ./kubernetes/join.sh
       flat: true
   - name: Fetch kubectl configuration
     fetch:
@@ -41,7 +41,7 @@
 
   - name: Copy join script
     copy:
-      src: ../kubernetes/join.sh
+      src: ./kubernetes/join.sh
       dest: /root/kubernetes/init.sh
       mode: 0744
 
